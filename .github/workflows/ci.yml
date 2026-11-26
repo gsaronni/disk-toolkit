@@ -1,0 +1,29 @@
+name: ci
+on:
+  # Branch pushes only: pushing a tag must not rerun CI against an old commit.
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install pytest
+        run: python -m pip install pytest
+      - name: pytest
+        run: python -m pytest -v
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: shellcheck
+        run: shellcheck bin/monitor-temp.sh
