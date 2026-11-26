@@ -436,7 +436,7 @@ NVMe uses different attribute names:
 
 ### Implemented Thresholds (v1.1.0)
 
-Unlike SATA/SAS, NVMe has no numbered attribute table — `smartctl -a` reports named fields under `SMART/Health Information` instead, so these are checked directly rather than through `ATTRIBUTE_RULES`:
+Unlike SATA, NVMe has no numbered attribute table: `smartctl -a` reports named fields under `SMART/Health Information` instead, so these are checked directly rather than through `ATTRIBUTE_RULES`:
 
 ```
 Critical Warning bitmap != 0      → CRITICAL (any bit set is a controller-reported fault)
@@ -446,7 +446,7 @@ Percentage Used >= 90%            → WARNING  (approaching rated endurance)
 Media and Data Integrity Errors > 0 → CRITICAL (uncorrectable, data at risk)
 ```
 
-Unsafe Shutdowns is tracked but not currently used as a trigger — it's expected to climb on any host that isn't cleanly shut down every time, so a raw count alone isn't a reliable signal without a rate/baseline to compare against.
+Unsafe Shutdowns is tracked but not currently used as a trigger: it's expected to climb on any host that isn't cleanly shut down every time, so a raw count alone isn't a reliable signal without a rate/baseline to compare against.
 
 ---
 

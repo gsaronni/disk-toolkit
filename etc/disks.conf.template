@@ -1,10 +1,11 @@
 # Disk Temperature Monitor Configuration
 # Format: device_path,friendly_name,grep_pattern
 #
-# Common grep patterns:
-#   - Temperature_Celsius (Seagate, WD)
-#   - Temp (Samsung SSD)
-#   - Current Drive Temperature (Intel SSD)
+# The monitor takes field 10 (RAW_VALUE) of the last smartctl -a line
+# matching grep_pattern, so the pattern must match an ATA attribute row:
+#   - Temperature_Celsius      (attribute 194, most HDDs and SSDs)
+#   - Airflow_Temperature_Cel  (attribute 190, some SSDs report only this)
+# NVMe and SAS disks print temperature in another layout and read as N/A.
 #
 # Find your pattern with: sudo smartctl -a /dev/sdX | grep -i temp
 
@@ -12,10 +13,10 @@
 
 # Two disks example:
 # /dev/sdf,DataDisk,Temperature_Celsius
-# /dev/sdh,MediaDisk,Temp
+# /dev/sdh,MediaDisk,Temperature_Celsius
 
-# Single SSD + Single HDD example:
-# /dev/sda,NVMe_SSD,Temp
+# SSD + HDD example:
+# /dev/sda,System_SSD,Temperature_Celsius
 # /dev/sdb,Backup_HDD,Temperature_Celsius
 
 # RAID array example:
