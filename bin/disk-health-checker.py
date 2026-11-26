@@ -2,7 +2,7 @@
 """
 Disk Health Checker - SMART Analysis Tool
 Analyzes disk health via smartctl and provides actionable recommendations.
-Covers SATA/SAS (numbered attribute table) and NVMe (named health block).
+Covers SATA (numbered ATA attribute table) and NVMe (named health block).
 
 Usage:
     sudo ./disk-health-checker.py               # Check all disks
@@ -49,7 +49,7 @@ from smart_parser import (  # noqa: E402
 )
 
 # ============================================================================
-# RICH — OPTIONAL, WITH PLAIN-TEXT FALLBACK
+# RICH: OPTIONAL, WITH PLAIN-TEXT FALLBACK
 # ============================================================================
 
 try:
@@ -144,7 +144,7 @@ except ImportError:
 console = Console()
 
 # ============================================================================
-# SATA/SAS ATTRIBUTE RULES DATABASE
+# SATA ATTRIBUTE RULES DATABASE
 # ============================================================================
 
 from dataclasses import dataclass
@@ -152,7 +152,7 @@ from dataclasses import dataclass
 
 @dataclass
 class AttributeRule:
-    """Rule definition for SATA/SAS SMART attribute analysis."""
+    """Rule definition for SATA SMART attribute analysis."""
     name: str
     check_normalized: bool = True
     check_raw: bool = False
@@ -267,7 +267,7 @@ ATTRIBUTE_RULES = {
 }
 
 # ============================================================================
-# ANALYSIS — SATA/SAS
+# ANALYSIS: SATA
 # ============================================================================
 
 def detect_manufacturer(model: str) -> str:
@@ -359,11 +359,11 @@ def analyze_sata_disk(disk: DiskInfo) -> None:
 
 
 # ============================================================================
-# ANALYSIS — NVMe
+# ANALYSIS: NVMe
 # ============================================================================
 
 def analyze_nvme_disk(disk: DiskInfo) -> None:
-    """NVMe has no numbered attribute table — rules key off named fields instead."""
+    """NVMe has no numbered attribute table; rules key off named fields instead."""
     if disk.nvme is None:
         return
     n = disk.nvme
@@ -519,7 +519,7 @@ def report_timestamp(now: Optional[datetime] = None) -> str:
 
 
 def disks_to_json(disks: List[DiskInfo]) -> dict:
-    """Structured, machine-readable snapshot — for occasional spot checks,
+    """Structured, machine-readable snapshot, for occasional spot checks,
     not continuous history. Pipe through jq or diff two runs by hand."""
     return {
         "timestamp": datetime.now().isoformat(),
@@ -553,7 +553,7 @@ def main():
         epilog="""
 Examples:
   sudo ./disk-health-checker.py               # Check all disks
-  sudo ./disk-health-checker.py -v            # Verbose (show all attributes)
+  sudo ./disk-health-checker.py -v            # Verbose (monitored attributes)
   sudo ./disk-health-checker.py -q            # Quiet (summary only)
   sudo ./disk-health-checker.py --critical    # Show only critical issues
   sudo ./disk-health-checker.py --json        # JSON to stdout
@@ -565,7 +565,7 @@ Exit Codes:
   2 = Critical issues found
         """,
     )
-    parser.add_argument("-v", "--verbose", action="store_true", help="Show all SMART attributes")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Show monitored SMART attributes (NVMe: all health fields)")
     parser.add_argument("-q", "--quiet", action="store_true", help="Summary only")
     parser.add_argument("--critical", action="store_true", help="Show only critical issues")
     parser.add_argument("--json", action="store_true", help="Print JSON to stdout instead of rendering")

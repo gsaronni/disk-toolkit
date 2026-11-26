@@ -6,19 +6,19 @@
 ```bash
 # Had to edit the script itself
 DISK_1_DEV="/dev/sdf"
-DISK_1_NAME="Avicenna"
+DISK_1_NAME="DataDisk"
 DISK_1_PATTERN="Temperature"
 
 DISK_2_DEV="/dev/sdh"
-DISK_2_NAME="Zimrilim"
+DISK_2_NAME="MediaDisk"
 DISK_2_PATTERN="Temp"
 ```
 
 ### NEW VERSION (Config File)
 ```bash
 # Just edit disks.conf
-/dev/sdf,Avicenna,Temperature
-/dev/sdh,Zimrilim,Temp
+/dev/sdf,DataDisk,Temperature
+/dev/sdh,MediaDisk,Temp
 ```
 
 ---
@@ -29,11 +29,11 @@ DISK_2_PATTERN="Temp"
 ```bash
 # Format: DISK_<n>_DEV and DISK_<n>_PATTERN
 DISK_1_DEV="/dev/sdf"
-DISK_1_NAME="Avicenna"
+DISK_1_NAME="DataDisk"
 DISK_1_PATTERN="Temperature"
 
 DISK_2_DEV="/dev/sdh"
-DISK_2_NAME="Zimrilim"
+DISK_2_NAME="MediaDisk"
 DISK_2_PATTERN="Temp"
 ```
 
@@ -191,5 +191,5 @@ fi
 ## Backwards Compatibility
 
 **The old CSV files still work!** The analyze-temp.py script reads column headers dynamically, so it works with both:
-- Old: `Timestamp,Avicenna_Temperature,Zimrilim_Temperature`
+- Old: `Timestamp,DataDisk_Temperature,MediaDisk_Temperature`
 - New: `Timestamp,SystemDrive_Temperature,BackupDrive_Temperature,DataDrive_Temperature`

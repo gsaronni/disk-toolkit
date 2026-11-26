@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-smart_parser.py — shared smartctl output parsing.
+smart_parser.py: shared smartctl output parsing.
 
-Handles both SATA/SAS (numbered attribute table) and NVMe (named
+Handles both SATA (numbered ATA attribute table) and NVMe (named
 "SMART/Health Information" block) output from `smartctl -a`, since
 they're structurally different and previously only SATA was parsed.
 
@@ -55,7 +55,7 @@ def run_smartctl(device: str, timeout: int = 10) -> Optional[str]:
 
 @dataclass
 class SmartAttribute:
-    """A single SATA/SAS numbered SMART attribute row."""
+    """A single SATA numbered SMART attribute row."""
     id: int
     name: str
     flag: str
@@ -70,7 +70,7 @@ class SmartAttribute:
 
 @dataclass
 class NvmeHealth:
-    """NVMe health fields. NVMe has no numbered attribute table — smartctl
+    """NVMe health fields. NVMe has no numbered attribute table; smartctl
     reports named fields under 'SMART/Health Information' instead."""
     critical_warning: int = 0
     temperature_c: int = 0

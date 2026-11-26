@@ -129,7 +129,7 @@ while true; do
     for i in "${!DEVICES[@]}"; do
         temp=$(get_temp "${DEVICES[$i]}" "${PATTERNS[$i]}")
         TEMPS+=("$temp")
-        DISPLAY_PARTS+=("${NAMES[$i]}: ${temp}°C")
+        DISPLAY_PARTS+=("${NAMES[$i]}: ${temp}C")
     done
     
     # Build CSV line
