@@ -11,8 +11,8 @@
 # Example configurations (uncomment and edit for your system):
 
 # Two disks example:
-/dev/sdf,Avicenna,Temperature
-/dev/sdh,Zimrilim,Temp
+# /dev/sdf,DataDisk,Temperature_Celsius
+# /dev/sdh,MediaDisk,Temp
 
 # Single SSD + Single HDD example:
 # /dev/sda,NVMe_SSD,Temp

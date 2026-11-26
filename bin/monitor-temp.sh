@@ -3,17 +3,23 @@
 # Disk Temperature Monitor - Real-time logging with rotation
 # Tracks SMART temperature data for specified disks over time
 
+# Paths are resolved from the script's own location, not the working
+# directory: config in etc/, log and backups at the repo root.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+
 # Configuration
-LOGFILE="temperature_log.csv"
-BACKUP_DIR="temp_logs_backup"
+LOGFILE="$REPO_ROOT/temperature_log.csv"
+BACKUP_DIR="$REPO_ROOT/temp_logs_backup"
 MAX_FILE_SIZE=50000000  # 50MB in bytes
 INTERVAL=10             # Log every 10 seconds
-CONFIG_FILE="disks.conf"
+CONFIG_FILE="$REPO_ROOT/etc/disks.conf"
 
 # Check if config file exists
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Error: $CONFIG_FILE not found!"
-    echo "Create it with format: device_path,friendly_name,grep_pattern"
+    echo "Copy etc/disks.conf.template to etc/disks.conf and edit it."
+    echo "Format: device_path,friendly_name,grep_pattern"
     echo "Example:"
     echo "  /dev/sda,SystemDrive,Temperature_Celsius"
     echo "  /dev/sdb,BackupDrive,Temp"
