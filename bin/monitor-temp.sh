@@ -64,7 +64,7 @@ mkdir -p "$BACKUP_DIR"
 
 # Function to rotate log file
 rotate_log() {
-    if [ -f "$LOGFILE" ] && [ $(stat -f%z "$LOGFILE" 2>/dev/null || stat -c%s "$LOGFILE") -gt $MAX_FILE_SIZE ]; then
+    if [ -f "$LOGFILE" ] && [ "$(stat -f%z "$LOGFILE" 2>/dev/null || stat -c%s "$LOGFILE")" -gt "$MAX_FILE_SIZE" ]; then
         BACKUP_NAME="$BACKUP_DIR/temperature_log_$(date +%Y%m%d_%H%M%S).csv"
         echo "Rotating log file to $BACKUP_NAME"
         mv "$LOGFILE" "$BACKUP_NAME"
@@ -76,7 +76,8 @@ rotate_log() {
 get_temp() {
     local device=$1
     local grep_pattern=$2
-    local temp=$(smartctl -a "$device" 2>/dev/null | grep "$grep_pattern" | awk 'END {print $10}')
+    local temp
+    temp=$(smartctl -a "$device" 2>/dev/null | grep "$grep_pattern" | awk 'END {print $10}')
     
     # Check if temp is a valid number
     if [[ "$temp" =~ ^[0-9]+$ ]]; then
