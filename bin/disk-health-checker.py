@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 """
-__version__ = "1.1.0"
-__author__ = "Gabriele Saronni"
-__description__ = "SMART disk health analyzer - AI-assisted development"
-__github__ = "https://github.com/gsaronni/disk-health-checker"
-
 Disk Health Checker - SMART Analysis Tool
 Analyzes disk health via smartctl and provides actionable recommendations.
 Covers SATA/SAS (numbered attribute table) and NVMe (named health block).
@@ -30,6 +25,11 @@ Dependencies:
     Proxmox host without pip access).
 """
 
+__version__ = "1.1.0"
+__author__ = "Gabriele Saronni"
+__description__ = "SMART disk health analyzer - AI-assisted development"
+__github__ = "https://github.com/gsaronni/disk-toolkit"
+
 import os
 import sys
 import re
@@ -38,7 +38,7 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 from dataclasses import asdict
-from typing import List
+from typing import List, Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "lib"))
 from smart_parser import (  # noqa: E402
@@ -331,7 +331,7 @@ def analyze_sata_disk(disk: DiskInfo) -> None:
                         "action": rule.action_critical,
                     })
                     disk.overall_status = "CRITICAL"
-                elif attr.value <= rule.normalized_warning and disk.overall_status != "CRITICAL":
+                elif attr.value <= rule.normalized_warning:
                     disk.issues.append({
                         "severity": "WARNING",
                         "attribute": attr.name,
@@ -397,7 +397,7 @@ def analyze_nvme_disk(disk: DiskInfo) -> None:
             "action": "Replace within 1-4 weeks",
         })
         disk.overall_status = "CRITICAL"
-    elif n.percentage_used_pct >= 90 and disk.overall_status != "CRITICAL":
+    elif n.percentage_used_pct >= 90:
         disk.issues.append({
             "severity": "WARNING",
             "attribute": "Percentage_Used",
@@ -511,6 +511,13 @@ def print_summary(disks: List[DiskInfo]) -> int:
     return 0
 
 
+def report_timestamp(now: Optional[datetime] = None) -> str:
+    """Local time with its UTC offset, e.g. '2026-11-23 14:05:00 +0100'."""
+    if now is None:
+        now = datetime.now().astimezone()
+    return now.strftime("%Y-%m-%d %H:%M:%S %z")
+
+
 def disks_to_json(disks: List[DiskInfo]) -> dict:
     """Structured, machine-readable snapshot — for occasional spot checks,
     not continuous history. Pipe through jq or diff two runs by hand."""
@@ -574,8 +581,7 @@ Exit Codes:
 
     json_mode = args.json or args.json_out
     if not json_mode:
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
-        console.print(Panel.fit(f"[bold]DISK HEALTH REPORT[/bold]\n{timestamp}", border_style="blue"))
+        console.print(Panel.fit(f"[bold]DISK HEALTH REPORT[/bold]\n{report_timestamp()}", border_style="blue"))
         console.print(f"\nFound {len(disk_paths)} disk(s): {', '.join(disk_paths)}\n")
 
     disks = []
