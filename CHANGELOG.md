@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here.
 
-## [1.1.1] - Unreleased
+## [1.1.1] - 2026-11-27
 
 ### Fixed
 - `bin/monitor-temp.sh` resolves `etc/disks.conf`, `temperature_log.csv` and `temp_logs_backup/` from its own location instead of the working directory. Since the 1.1.0 restructure it looked for `disks.conf` in the working directory and never found `etc/disks.conf`.

@@ -8,7 +8,7 @@ import pytest
 
 
 def test_dunders_are_real_attributes(checker):
-    assert checker.__version__ == "1.1.0"
+    assert checker.__version__ == "1.1.1"
     assert checker.__github__ == "https://github.com/gsaronni/disk-toolkit"
 
 

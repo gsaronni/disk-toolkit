@@ -25,7 +25,7 @@ Dependencies:
     Proxmox host without pip access).
 """
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __author__ = "Gabriele Saronni"
 __description__ = "SMART disk health analyzer - AI-assisted development"
 __github__ = "https://github.com/gsaronni/disk-toolkit"
